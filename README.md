@@ -28,6 +28,7 @@ clasp push
 2. GoogleDrive上に `Github-gas-four-keys` という名前のスプレッドシートが作られます.
 3. 作成されたスプレッドシートの[Apps Script プロジェクト](https://developers.google.com/apps-script/guides/projects?hl=ja#create-from-docs-sheets-slides)を開きます.
 4. 以下の[ScriptProperty](https://developers.google.com/apps-script/guides/properties?hl=ja#add_script_properties)を設定します.
+
 |プロパティ|値|
 |----|----|
 |GITHUB_API_TOKEN|GitHubアクセストークンの準備で作成したトークン|
