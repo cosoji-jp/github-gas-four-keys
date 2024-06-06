@@ -33,5 +33,6 @@ clasp push
 |GITHUB_API_TOKEN|GitHubアクセストークンの準備で作成したトークン|
 |GITHUB_REPO_NAMES|レポジトリ名のJSON配列. 例) `["github-gas-four-keys]`|
 |GITHUB_REPO_OWNER|レポジトリのOwnerあるいはOrganization名. 例 `[cosoji-jp]`|
+
 5. [Apps Script プロジェクト](https://developers.google.com/apps-script/guides/projects?hl=ja#create-from-docs-sheets-slides)から、 `initialize` 関数を実行します.
 6. [Apps Script プロジェクト](https://developers.google.com/apps-script/guides/projects?hl=ja#create-from-docs-sheets-slides)から、 `getAllRepos` 関数を実行します.
