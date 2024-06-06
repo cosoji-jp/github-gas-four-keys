@@ -1,6 +1,10 @@
 # github-gas-four-keys
 ## 概要
-GitHubからFourKeys統計をGoogleSpreadsheetへ出力するツールです.
+GoogleSpreadsheetでGitHubレポジトリのFourKeysの計測/可視化を行うツールです.
+以下の特徴があります.
+- PullRequestのソースブランチ名を利用してFourKeys計測を行うため、導入が容易
+- GASを用いて自動化されるため、インフラコストが不要
+
 ![出力例](img/example.png)
 
 ## インストレーション
