@@ -30,8 +30,8 @@ function initialize() {
 
   settingsSheet.getRange(1, 1, 2, 2)
     .setValues([
-      ["集計メンバー", "集計可否"],
-      [`=unique('${pullRequestsSheetName}'!A2:A20000)`, ""]
+      ["集計メンバー", "集計可否(TRUEかFALSEを入力してください)"],
+      [`=unique('${pullRequestsSheetName}'!A2:A100000000)`, ""]
   ]);
 
   settingsSheet.getRange(1, 1, 1, 2)
@@ -114,13 +114,13 @@ function initialize() {
 
   fourKeysSheet.getRange(3, 2, 1, 8)
     .setValues([[
-      `=SUM(MAP('${settingsSheetName}'!B$2:B$1000, '${settingsSheetName}'!A$2:A$1000, LAMBDA(b, a, IF(b<>"FALSE", COUNTIFS('${pullRequestsSheetName}'!F$2:F$20000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$20000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$20000, FALSE, '${pullRequestsSheetName}'!A$2:A$20000, a), 0))))/'${settingsSheetName}'!E$2`,
+      `=SUM(MAP('${settingsSheetName}'!B$2:B$1000, '${settingsSheetName}'!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$100000000, FALSE, '${pullRequestsSheetName}'!A$2:A$100000000, a), 0))))/'${settingsSheetName}'!E$2`,
       `=IFS(B3>='${settingsSheetName}'!E$5, "Elite", B3>='${settingsSheetName}'!E$6, "High", B3>='${settingsSheetName}'!E$7, "Medium", TRUE, "Low")`,
-      `=IF(B3 > 0, SUM(MAP('${settingsSheetName}'!B$2:B$1000, '${settingsSheetName}'!A$2:A$1000, LAMBDA(b, a, IF(b<>"FALSE", SUMIFS('${pullRequestsSheetName}'!G$2:G$20000, '${pullRequestsSheetName}'!F$2:F$20000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$20000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$20000, FALSE, '${pullRequestsSheetName}'!A$2:A$20000, a)/${minutes}, 0)))) / (B3*'${settingsSheetName}'!E$2), 0)`,
+      `=IF(B3 > 0, SUM(MAP('${settingsSheetName}'!B$2:B$1000, '${settingsSheetName}'!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), SUMIFS('${pullRequestsSheetName}'!G$2:G$100000000, '${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$100000000, FALSE, '${pullRequestsSheetName}'!A$2:A$100000000, a)/${minutes}, 0)))) / (B3*'${settingsSheetName}'!E$2), 0)`,
       `=IFS(D3<='${settingsSheetName}'!E$8, "Elite", D3<='${settingsSheetName}'!E$9, "High", D3<='${settingsSheetName}'!E$10, "Medium", TRUE, "Low")`,
-      `=IF(B3 > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(b<>"FALSE", COUNTIFS('${pullRequestsSheetName}'!F$2:F$20000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$20000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$20000, TRUE, '${pullRequestsSheetName}'!A$2:A$20000, a), 0))))/(B3*'${settingsSheetName}'!E$2), 0)`,
+      `=IF(B3 > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a), 0))))/(B3*'${settingsSheetName}'!E$2), 0)`,
       `=IFS(F3<='${settingsSheetName}'!E$11, "Elite", F3<='${settingsSheetName}'!E$12, "High", F3<='${settingsSheetName}'!E$13, "Medium", TRUE, "Low")`,
-      `=IF(SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(b<>"FALSE", COUNTIFS('${pullRequestsSheetName}'!F$2:F$20000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$20000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$20000, TRUE, '${pullRequestsSheetName}'!A$2:A$20000, a))))) > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(b<>"FALSE", SUMIFS('${pullRequestsSheetName}'!G$2:G$20000, '${pullRequestsSheetName}'!F$2:F$20000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$20000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$20000, TRUE, '${pullRequestsSheetName}'!A$2:A$20000, a)))))/60/SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(b<>"FALSE", COUNTIFS('${pullRequestsSheetName}'!F$2:F$20000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$20000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$20000, TRUE, '${pullRequestsSheetName}'!A$2:A$20000, a))))), 0)`,
+      `=IF(SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))) > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), SUMIFS('${pullRequestsSheetName}'!G$2:G$100000000, '${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a)))))/60/SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))), 0)`,
       `=IFS(H3<='${settingsSheetName}'!E$14, "Elite", H3<='${settingsSheetName}'!E$15, "High", H3<='${settingsSheetName}'!E$16, "Medium", TRUE, "Low")`
     ]])
     .setNumberFormats([[
@@ -195,7 +195,7 @@ function initialize() {
     .setPosition(20, 10, 0, 0)
     .build();
   fourKeysSheet.insertChart(incidentChart);
-  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === "getAllRepos").forEach(t => t.deleteTrigger(t));
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === "getAllRepos").forEach(t => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger("getAllRepos")
     .timeBased()
     .onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(0)
@@ -206,13 +206,11 @@ function getAllRepos() {
 
   let i = 0;
   repositoryNames.forEach((repositoryName) => {
-    console.log(repositoryName);
     const pullRequests = getPullRequests(repositoryName);
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName(`プルリク情報`);
     for (; i < pullRequests.length; i++) {
-      console.log(pullRequests.length);
       const pullRequest = pullRequests[i];
   
       let firstCommitDate = null;
