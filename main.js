@@ -210,7 +210,7 @@ function getAllRepos() {
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName(`プルリク情報`);
-    for (const pullRequest of pullRequests.length) {
+    for (const pullRequest of pullRequests) {
 
       let firstCommitDate = null;
       if (pullRequest.commits.nodes[0].commit.committedDate) {
