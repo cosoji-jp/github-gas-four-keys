@@ -147,7 +147,7 @@ function initialize() {
     .setChartType(Charts.ChartType.COMBO)
     .setNumHeaders(1)
     .setOption("title", "デプロイ頻度と変更リードタイム")
-    .setOption("series",[ 
+    .setOption("series",[
       { targetAxisIndex: 0, legend: "デプロイ頻度(1日あたり)"},
       { targetAxisIndex: 1, legend: "変更リードタイム"},
     ])
@@ -175,7 +175,7 @@ function initialize() {
     .setChartType(Charts.ChartType.COMBO)
     .setNumHeaders(1)
     .setOption("title", "変更障害率と平均復旧時間")
-    .setOption("series",[ 
+    .setOption("series",[
       { targetAxisIndex: 0, legend: "変更障害率"},
       { targetAxisIndex: 1, legend: "平均修復時間"},
     ])
@@ -210,9 +210,8 @@ function getAllRepos() {
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName(`プルリク情報`);
-    for (; i < pullRequests.length; i++) {
-      const pullRequest = pullRequests[i];
-  
+    for (const pullRequest of pullRequests) {
+
       let firstCommitDate = null;
       if (pullRequest.commits.nodes[0].commit.committedDate) {
         firstCommitDate = new Date(pullRequest.commits.nodes[0].commit.committedDate);
@@ -220,7 +219,7 @@ function getAllRepos() {
       let mergedAt = null;
       if (pullRequest.mergedAt) {
         mergedAt = new Date(pullRequest.mergedAt);
-      } 
+      }
       sheet.getRange(i+2, 1).setValue(pullRequest.author.login);
       sheet.getRange(i+2, 2).setValue(pullRequest.headRefName);
       sheet.getRange(i+2, 3).setValue(pullRequest.bodyText);
@@ -231,6 +230,8 @@ function getAllRepos() {
       sheet.getRange(i+2, 8).setValue(repositoryName);
       sheet.getRange(i+2, 9).setValue(`=REGEXMATCH(B${i+2}, '分析設定'!$E$3)`);
       sheet.getRange(i+2, 10).setValue(`=REGEXMATCH(B${i+2}, '分析設定'!$E$4)`);
+
+      i++;
     }
   });
 }
@@ -285,7 +286,7 @@ function getPullRequests(repositoryName) {
     }
     after = ', after: "' + json.data.repository.pullRequests.pageInfo.endCursor + '"';
   }
- 
+
   return resultPullRequests;
 }
 
