@@ -18,7 +18,7 @@ function initialize() {
       "マージ済",
       "初コミット日時",
       "マージ日時",
-      "マージまでの時間(分)",
+      "マージまでの時間(hours)",
       "リポジトリ",
       "障害発生判定",
       "障害対応PR",
@@ -62,7 +62,6 @@ function initialize() {
 
   const fourKeysSheetName = "FourKeys計測結果";
   const fourKeysSheet = getOrCreateSheet(fourKeysSheetName);
-  const minutes = 60;
 
   fourKeysSheet.getRange(1, 1, 2, 9)
     .setValues([
@@ -116,11 +115,11 @@ function initialize() {
     .setValues([[
       `=SUM(MAP('${settingsSheetName}'!B$2:B$1000, '${settingsSheetName}'!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$100000000, FALSE, '${pullRequestsSheetName}'!A$2:A$100000000, a), 0))))/'${settingsSheetName}'!E$2`,
       `=IFS(B3>='${settingsSheetName}'!E$5, "Elite", B3>='${settingsSheetName}'!E$6, "High", B3>='${settingsSheetName}'!E$7, "Medium", TRUE, "Low")`,
-      `=IF(B3 > 0, SUM(MAP('${settingsSheetName}'!B$2:B$1000, '${settingsSheetName}'!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), SUMIFS('${pullRequestsSheetName}'!G$2:G$100000000, '${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$100000000, FALSE, '${pullRequestsSheetName}'!A$2:A$100000000, a)/${minutes}, 0)))) / (B3*'${settingsSheetName}'!E$2), 0)`,
+      `=IF(B3 > 0, SUM(MAP('${settingsSheetName}'!B$2:B$1000, '${settingsSheetName}'!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), SUMIFS('${pullRequestsSheetName}'!G$2:G$100000000, '${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$100000000, FALSE, '${pullRequestsSheetName}'!A$2:A$100000000, a), 0)))) / (B3*'${settingsSheetName}'!E$2), 0)`,
       `=IFS(D3<='${settingsSheetName}'!E$8, "Elite", D3<='${settingsSheetName}'!E$9, "High", D3<='${settingsSheetName}'!E$10, "Medium", TRUE, "Low")`,
       `=IF(B3 > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a), 0))))/(B3*'${settingsSheetName}'!E$2), 0)`,
       `=IFS(F3<='${settingsSheetName}'!E$11, "Elite", F3<='${settingsSheetName}'!E$12, "High", F3<='${settingsSheetName}'!E$13, "Medium", TRUE, "Low")`,
-      `=IF(SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))) > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), SUMIFS('${pullRequestsSheetName}'!G$2:G$100000000, '${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a)))))/60/SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))), 0)`,
+      `=IF(SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))) > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), SUMIFS('${pullRequestsSheetName}'!G$2:G$100000000, '${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a)))))/SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))), 0)`,
       `=IFS(H3<='${settingsSheetName}'!E$14, "Elite", H3<='${settingsSheetName}'!E$15, "High", H3<='${settingsSheetName}'!E$16, "Medium", TRUE, "Low")`
     ]])
     .setNumberFormats([[
@@ -220,16 +219,20 @@ function getAllRepos() {
       if (pullRequest.mergedAt) {
         mergedAt = new Date(pullRequest.mergedAt);
       }
-      sheet.getRange(i+2, 1).setValue(pullRequest.author.login);
-      sheet.getRange(i+2, 2).setValue(pullRequest.headRefName);
-      sheet.getRange(i+2, 3).setValue(pullRequest.bodyText);
-      sheet.getRange(i+2, 4).setValue(pullRequest.merged);
-      if (firstCommitDate) sheet.getRange(i+2, 5).setValue(formatDate(firstCommitDate));
-      if (mergedAt) sheet.getRange(i+2, 6).setValue(formatDate(mergedAt));
-      if (firstCommitDate && mergedAt) sheet.getRange(i+2, 7).setValue((mergedAt.getTime() - firstCommitDate.getTime()) / 60 / 1000);
-      sheet.getRange(i+2, 8).setValue(repositoryName);
-      sheet.getRange(i+2, 9).setValue(`=REGEXMATCH(B${i+2}, '分析設定'!$E$3)`);
-      sheet.getRange(i+2, 10).setValue(`=REGEXMATCH(B${i+2}, '分析設定'!$E$4)`);
+      const index = i + 2;
+      sheet.getRange(index, 1).setValue(pullRequest.author.login);
+      sheet.getRange(index, 2).setValue(pullRequest.headRefName);
+      sheet.getRange(index, 3).setValue(pullRequest.bodyText);
+      sheet.getRange(index, 4).setValue(pullRequest.merged);
+      sheet.getRange(index, 5).setValue(!!firstCommitDate ? formatDate(firstCommitDate) : "");
+      sheet.getRange(index, 6).setValue(!!mergedAt ? formatDate(mergedAt) : "");
+      sheet.getRange(index, 7).setValue(
+        (!!firstCommitDate && !!mergedAt) ?
+        (mergedAt.getTime() - firstCommitDate.getTime()) / 60 / 60 / 1000 :
+        "");
+      sheet.getRange(index, 8).setValue(repositoryName);
+      sheet.getRange(index, 9).setValue(`=REGEXMATCH(B${index}, '分析設定'!$E$3)`);
+      sheet.getRange(index, 10).setValue(`=REGEXMATCH(B${index}, '分析設定'!$E$4)`);
 
       i++;
     }
