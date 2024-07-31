@@ -62,7 +62,6 @@ function initialize() {
 
   const fourKeysSheetName = "FourKeys計測結果";
   const fourKeysSheet = getOrCreateSheet(fourKeysSheetName);
-  const minutes = 60;
 
   fourKeysSheet.getRange(1, 1, 2, 9)
     .setValues([
