@@ -10,7 +10,7 @@ function initialize() {
 
   const pullRequestsSheetName = "プルリク情報";
   const pullRequestsSheet = getOrCreateSheet(pullRequestsSheetName);
-  pullRequestsSheet.getRange(1, 1, 1, 10)
+  pullRequestsSheet.getRange(1, 1, 1, 12)
     .setValues([[
       "メンバー名",
       "ブランチ名",
@@ -22,6 +22,8 @@ function initialize() {
       "リポジトリ",
       "障害発生判定",
       "障害対応PR",
+      "バグラベル",
+      "機能ラベル"
     ]])
     .setBackgroundRGB(224, 224, 224);
 
@@ -119,7 +121,7 @@ function initialize() {
       `=IFS(D3<='${settingsSheetName}'!E$8, "Elite", D3<='${settingsSheetName}'!E$9, "High", D3<='${settingsSheetName}'!E$10, "Medium", TRUE, "Low")`,
       `=IF(B3 > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!I$2:I$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a), 0))))/(B3*'${settingsSheetName}'!E$2), 0)`,
       `=IFS(F3<='${settingsSheetName}'!E$11, "Elite", F3<='${settingsSheetName}'!E$12, "High", F3<='${settingsSheetName}'!E$13, "Medium", TRUE, "Low")`,
-      `=IF(SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))) > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), SUMIFS('${pullRequestsSheetName}'!G$2:G$100000000, '${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a)))))/SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))), 0)`,
+      `=IF(SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))) > 0, SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$1000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), SUMIFS('${pullRequestsSheetName}'!G$2:G$100000000, '${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a)))))/SUM(MAP(${settingsSheetName}!B$2:B$1000, ${settingsSheetName}!A$2:A$100000000, LAMBDA(b, a, IF(OR(b<>FALSE, ISBLANK(b)), COUNTIFS('${pullRequestsSheetName}'!F$2:F$100000000, ">=" & A3-'${settingsSheetName}'!E$2,'${pullRequestsSheetName}'!F$2:F$100000000, "<" & A3, '${pullRequestsSheetName}'!J$2:J$100000000, TRUE, '${pullRequestsSheetName}'!A$2:A$100000000, a))))), 0)`,
       `=IFS(H3<='${settingsSheetName}'!E$14, "Elite", H3<='${settingsSheetName}'!E$15, "High", H3<='${settingsSheetName}'!E$16, "Medium", TRUE, "Low")`
     ]])
     .setNumberFormats([[
@@ -234,6 +236,10 @@ function getAllRepos() {
       sheet.getRange(index, 9).setValue(`=REGEXMATCH(B${index}, '分析設定'!$E$3)`);
       sheet.getRange(index, 10).setValue(`=REGEXMATCH(B${index}, '分析設定'!$E$4)`);
 
+      const labels = pullRequest.labels.nodes.map(label => label.name);
+      sheet.getRange(index, 11).setValue(labels.includes("bug"));
+      sheet.getRange(index, 12).setValue(labels.includes("feature"));
+
       i++;
     }
   });
@@ -267,6 +273,11 @@ function getPullRequests(repositoryName) {
                 commit {
                   committedDate
                 }
+              }
+            }
+            labels(first: 10) {
+              nodes {
+                name
               }
             }
           }
